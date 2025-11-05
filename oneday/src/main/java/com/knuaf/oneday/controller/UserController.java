@@ -32,16 +32,14 @@ public class UserController {
 
     @GetMapping("/signup")
     public String signup(){
-        //log.info("test");
         return "signup";
     }
 
     @PostMapping("/signup")
-    public String registerUSer(@RequestParam String username,@RequestParam String password){
+    public String registerUSer(@RequestParam String userId,@RequestParam String password, @RequestParam String StudentId,@RequestParam String name, @RequestParam String major){
         log.info("test");
-        userService.register(username, password);
+        userService.register(userId, password, name, StudentId, major );
         //after signup success, redirect to login page
-        log.info("redirection");
         return "redirect:/home";
     }
 

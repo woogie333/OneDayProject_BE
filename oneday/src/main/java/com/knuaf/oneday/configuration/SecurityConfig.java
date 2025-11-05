@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .loginPage("/login")
                 //로그인 성공 시 이동할 기본 경로
                 .defaultSuccessUrl("/welcome", true)
+                    .usernameParameter("userId")
                 .permitAll()
             )
             .logout(logout ->logout
