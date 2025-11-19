@@ -8,11 +8,5 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CourseRequest {
-    @NotBlank
-    private String courseName;
-    private String courseCode;
-    private Long credits;
-    private String semester;
-    private String courseType;
-    private Double gettingCredits
+
 }

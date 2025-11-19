@@ -1,6 +1,6 @@
-package com.example.roadmap.repository;
+package com.knuaf.roadmap.repository;
 
-import com.example.roadmap.domain.Course;
+import com.knuaf.roadmap.domain.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
