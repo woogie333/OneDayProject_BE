@@ -1,9 +1,9 @@
-package com.example.roadmap.service;
+package com.knuaf.roadmap.service;
 
-import com.example.roadmap.domain.Course;
-import com.example.roadmap.dto.CourseRequest;
-import com.example.roadmap.dto.CourseResponse;
-import com.example.roadmap.repository.CourseRepository;
+import com.knuaf.roadmap.domain.Course;
+import com.knuaf.roadmap.dto.CourseRequest;
+import com.knuaf.roadmap.dto.CourseResponse;
+import com.knuaf.roadmap.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,54 +13,17 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true) // 기본적으로 조회 모드 (성능 최적화)
 public class CourseService {
 
     private final CourseRepository courseRepository;
 
-    // 추가 (POST)
-    @Transactional
-    public Long save(CourseRequest request) {
-        Course course = Course.builder()
-                .courseName(request.getCourseName())
-                .courseCode(request.getCourseCode())
-                .credits(request.getCredits())
-                .semester(request.getSemester())
-                .courseType(request.getCourseType())
-                .build();
-        return courseRepository.save(course).getId();
-    }
-
     // 목록 조회 (GET)
-    @Transactional(readOnly = true)
     public List<CourseResponse> findAll() {
         return courseRepository.findAll().stream()
-                .map(CourseResponse::new)
+                // ⚠️ 수정된 부분: CourseResponse::new -> CourseResponse::from
+                // 우리가 DTO에 만들어둔 'from' 메서드를 사용하여 변환합니다.
+                .map(CourseResponse::from)
                 .collect(Collectors.toList());
-    }
-
-    // 수정 (PATCH)
-    @Transactional
-    public Long update(Long id, CourseRequest request) {
-        Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 과목 ID입니다: " + id));
-
-        // Course 엔티티의 update 메서드 호출
-        course.update(
-                request.getCourseName(),
-                request.getCourseCode(),
-                request.getCredits(),
-                request.getSemester(),
-                request.getCourseType()
-        );
-        return id;
-    }
-
-    //삭제 (DELETE)
-    @Transactional
-    public void delete(Long id) {
-        Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 과목 ID입니다: " + id));
-
-        courseRepository.delete(course);
     }
 }
