@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .readonly-section { background-color: #f0f0f0; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="number"] { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        a { text-decoration: none; color: #666; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>마이페이지</h1>
+    <p>환영합니다, <span th:text="${user.userId}">User</span>님!</p>
+
+    <div class="readonly-section">
+        <h3>기본 정보 (수정 불가)</h3>
+        <p><strong>아이디:</strong> <span th:text="${user.userId}">user1</span></p>
+        <p><strong>학번:</strong> <span th:text="${user.studentId}">20251234</span></p>
+    </div>
+
+    <form action="/mypage/update" method="post">
+        <h3>상세 정보 입력/수정</h3>
+
+        <div class="form-group">
+            <label for="major">전공</label>
+            <input type="text" id="major" name="major"
+                   th:value="${user.major}" placeholder="예: 인공지능 트랙">
+        </div>
+
+        <div class="form-group">
+            <label for="specific_major">세부 전공</label>
+            <input type="text" id="specific_major" name="specific_major"
+                   th:value="${user.specific_major}" placeholder="예: 인공지능 트랙">
+        </div>
+
+        <div class="form-group">
+            <label for="eng_score">영어 성적 (토익 등)</label>
+            <input type="number" id="eng_score" name="eng_score"
+                   th:value="${user.eng_score}" placeholder="점수 입력">
+        </div>
+
+        <div class="form-group">
+            <label for="total_credit">총 이수 학점</label>
+            <input type="number" id="total_credit" name="total_credit"
+                   th:value="${user.total_credit}">
+        </div>
+
+        <div class="form-group">
+            <label for="general_credit">교양 학점</label>
+            <input type="number" id="general_credit" name="general_credit"
+                   th:value="${user.general_credit}">
+        </div>
+
+        <div class="form-group">
+            <label for="major_credit">전공 학점</label>
+            <input type="number" id="major_credit" name="major_credit"
+                   th:value="${user.major_credit}">
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" name="internship"
+                       th:checked="${user.internship}">
+                현장실습 이수 여부
+            </label>
+        </div>
+
+        <button type="submit">정보 수정 저장</button>
+    </form>
+
+    <br>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" style="background-color: #6c757d;">로그아웃</button>
+    </form>
+</div>
+
+</body>
+</html>

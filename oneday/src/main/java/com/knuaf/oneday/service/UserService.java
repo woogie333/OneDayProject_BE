@@ -1,5 +1,8 @@
 package com.knuaf.oneday.service;
 
+import com.knuaf.oneday.dto.SignupRequest;
+import com.knuaf.oneday.dto.MypageRequest;
+//import com.knuaf.oneday.securitydemo.entity.Major;
 import com.knuaf.oneday.entity.User;
 import com.knuaf.oneday.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,54 +10,65 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.context.annotation.Lazy;
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 @Service
+@Transactional
 public class UserService implements UserDetailsService {
-
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    // 생성자 주입 (여기에 @Lazy 같은 건 필요 없습니다. 파일이 분리되었으니까요!)
+    public UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    //회원가입 로직
-    public User register(String userId, String password, String name, String StudentId, String major){
-
-        log.info("회원가입 시도: userid={}", userId);
-
+    // 1. 회원가입
+    public User register(SignupRequest request) {
         User user = new User();
-        user.setUserId(userId);
-        user.setStudentId(StudentId);
-        user.setMajor(major);
-        user.setName(name);
-        //비밀번호 암호화 후 저장
-        user.setPassword(passwordEncoder.encode(password));
-        User savedUser = userRepository.save(user);
-
-        // 4. 저장 직후 로그 추가
-        log.info("회원가입 성공: userId={}", savedUser.getIdx());
-
-        return savedUser;
+        user.setUserId(request.getUserId());
+        // 반드시 암호화해서 저장!
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setStudentId(request.getStudentId());
+        user.setName(request.getName());
+        return userRepository.save(user);
     }
 
+    // 2. 로그인 시 사용자 정보 불러오기 (Spring Security 필수)
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         User user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: "+userId));
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + userId));
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUserId(),
                 user.getPassword(),
-                new ArrayList<>() //권한 목록, 일단 비워둠
+                new ArrayList<>()
         );
+    }
+
+    // 3. 내 정보 조회
+    public User getMyInfo(String userId) {
+        return userRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+    }
+
+    // 4. 내 정보 수정
+    public User updateUserInfo(String userId, MypageRequest request) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+        user.setMajor(request.getMajor());
+        user.setSpecific_major(request.getSpecific_major());
+        user.setEng_score(request.getEng_score());
+        user.setTotal_credit(request.getTotal_credit());
+        user.setGeneral_credit(request.getGeneral_credit());
+        user.setMajor_credit(request.getMajor_credit());
+        user.setInternship(request.isInternship());
+
+        return userRepository.save(user);
     }
 }

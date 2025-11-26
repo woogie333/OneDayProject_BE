@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="d6d08bdf-0e1b-458c-8aa3-976eca0cbc6a" name="OneDayProject">
+        <fileTransfer accessType="SFTP" host="16.176.198.162" port="22" sshConfigId="b9c70682-ae18-48e9-a4e2-fc8950633d52" sshConfig="ubuntu@16.176.198.162:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
