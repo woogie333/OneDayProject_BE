@@ -1,5 +1,6 @@
 package com.knuaf.oneday.repository;
 
+import com.knuaf.oneday.entity.Lecture;
 import com.knuaf.oneday.entity.UserAttend;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
