@@ -31,17 +31,17 @@ public class UserController {
         return "home";
     }
 
-    @GetMapping("/api/login")
+    @GetMapping("/login")
     public String login(){
         return "login";
     }
 
-    @GetMapping("/api/signup")
+    @GetMapping("/signup")
     public String signup(){
         return "signup";
     }
 
-    @PostMapping("/api/signup")
+    @PostMapping("/signup")
     public String registerUSer(@ModelAttribute SignupRequest request){
         userService.register(request);
         //after signup success, redirect to login page
@@ -82,7 +82,7 @@ public class UserController {
         return "mypage"; // templates/mypage.html 파일을 찾아감
     }
 */
-@GetMapping("/api/mypage")
+@GetMapping("/mypage")
 public String showMyPage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
     User user;
     // 1. 로그인을 한 경우 (userDetails가 존재함)
@@ -123,7 +123,7 @@ public String showMyPage(Model model, @AuthenticationPrincipal UserDetails userD
 
     // ✅ 2. 마이페이지 정보 수정 처리 (POST)
     // HTML form은 기본적으로 PUT을 지원하지 않아 POST를 사용합니다.
-    @PostMapping("/api/mypage/update")
+    @PostMapping("/mypage/update")
     public String updateMyPage(
             @AuthenticationPrincipal UserDetails userDetails,
             @ModelAttribute MypageRequest updateDto) { // @RequestBody -> @ModelAttribute 변경
