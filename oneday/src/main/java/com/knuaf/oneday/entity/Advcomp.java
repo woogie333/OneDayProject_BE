@@ -9,12 +9,14 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+
 @NoArgsConstructor
 @Table(name = "Advcomp")
 public class Advcomp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;//인덱스
+
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", referencedColumnName = "student_id")
@@ -36,5 +38,6 @@ public class Advcomp {
     public Advcomp(User user) {
         this.user = user;
     }
+
 
 }
