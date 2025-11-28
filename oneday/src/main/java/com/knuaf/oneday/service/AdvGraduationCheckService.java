@@ -56,7 +56,7 @@ public class AdvGraduationCheckService {
         User user = userRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다."));
 
-        Advcomp adv = advcompRepository.findByStudentId(studentId)
+        Advcomp adv = advcompRepository.findByUser_StudentId(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("심화컴퓨터 이수 정보를 찾을 수 없습니다."));
 
         List<CheckItem> items = new ArrayList<>();
