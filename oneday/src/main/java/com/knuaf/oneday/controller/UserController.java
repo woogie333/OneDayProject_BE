@@ -57,10 +57,15 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String registerUser(@ModelAttribute SignupRequest request){
-        userService.register(request);
-        //after signup success, redirect to login page
-        return "redirect:/api/auth/home";
+    public ResponseEntity<String> registerUser(@RequestBody SignupRequest request){
+        try {
+            userService.register(request);
+            // 성공 시 200 OK와 메시지 전달
+            return ResponseEntity.ok("회원가입이 완료되었습니다.");
+        } catch (Exception e) {
+            // 실패 시(예: 중복 ID 등) 400 Bad Request 전달
+            return ResponseEntity.badRequest().body("회원가입 실패: " + e.getMessage());
+        }
     }
 /* //로그인 경로 우회 X
     @GetMapping("/mypage")
