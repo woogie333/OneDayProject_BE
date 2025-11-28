@@ -37,6 +37,7 @@ public class UserController {
     public String login(){
         return "login";
     }
+
     @PostMapping("/withdraw")
     public String withdraw(@AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request){
         if(userDetails != null) {

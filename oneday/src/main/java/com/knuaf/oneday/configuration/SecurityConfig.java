@@ -33,7 +33,18 @@ public class SecurityConfig {
                         .loginPage("/api/auth/login")
                         .loginProcessingUrl("/api/auth/login")
                         .usernameParameter("userId")
-                        .defaultSuccessUrl("/api/auth/mypage", true)
+                        .successHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK); // 200 OK
+                            response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
+                            response.getWriter().write("{\"message\": \"login success\"}");
+                        })
+                        .failureHandler((request, response, exception) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Error
+                            response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
+                            response.getWriter().write("{\"message\": \"login failed\"}");
+                        })
                         .permitAll()
                 )
                 .logout(logout -> logout
