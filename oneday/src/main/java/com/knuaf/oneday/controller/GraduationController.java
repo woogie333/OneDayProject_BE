@@ -1,9 +1,11 @@
 package com.knuaf.oneday.controller;
 
 import com.knuaf.oneday.dto.GraduationCheckResponse;
+import com.knuaf.oneday.dto.SimpleGraduationResponse;
 import com.knuaf.oneday.entity.User;
 import com.knuaf.oneday.repository.UserRepository;
 import com.knuaf.oneday.service.IntegratedGraduationService;
+import com.knuaf.oneday.service.SimpleGraduationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +19,7 @@ public class GraduationController {
 
     private final IntegratedGraduationService integratedService;
     private final UserRepository userRepository; // 학번을 찾기 위해 추가
+    private final SimpleGraduationService simpleService;
 
     // GET /api/graduation/my-status (URL에 학번을 노출하지 않음)
     @GetMapping("/my-status")
@@ -39,5 +42,16 @@ public class GraduationController {
         GraduationCheckResponse response = integratedService.checkGraduation(studentId);
 
         return ResponseEntity.ok(response);
+    }
+    // GET /api/graduation/simple
+    @GetMapping("/simple")
+    public ResponseEntity<SimpleGraduationResponse> getSimpleStatus(
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        if (userDetails == null) {
+            throw new IllegalArgumentException("로그인이 필요합니다.");
+        }
+
+        return ResponseEntity.ok(simpleService.getSimpleStatus(userDetails.getUsername()));
     }
 }
