@@ -146,7 +146,7 @@ public ResponseEntity<User> showMyPage(@AuthenticationPrincipal UserDetails user
     @ResponseBody
     public ResponseEntity<String> updateMyPage(
             @AuthenticationPrincipal UserDetails userDetails,
-            @ModelAttribute MypageRequest updateDto) { // @RequestBody -> @ModelAttribute 변경
+            @RequestBody MypageRequest updateDto) { // @RequestBody -> @ModelAttribute 변경
 
         if(userDetails != null) {
             return ResponseEntity.status(401).body("로그인이 필요합니다.");
