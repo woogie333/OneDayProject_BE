@@ -40,7 +40,7 @@ public class User {
     private Double totalgpa = 0.0;
 
     @Column(name ="major_gpa")//전공 평균 학점
-    private Double majorGpa = 0.0;
+    private Double majorgpa = 0.0;
 
     // 양방향 매핑 (선택)
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)

@@ -46,7 +46,8 @@ public class UserService implements UserDetailsService {
         user.setMajor(request.getMajor());
         User savedUser = userRepository.save(user);
 
-        if(user.getMajor().equals("심화컴퓨팅전공")) {
+        String major = user.getMajor();
+        if(major.equals("심화컴퓨팅전공")||major.equals("플랫폼SW융합전공")) {
             Advcomp adv = new Advcomp();
             adv.setUser(savedUser);
 
@@ -57,7 +58,7 @@ public class UserService implements UserDetailsService {
 
             advcompRepository.save(adv);
         }
-        else if(user.getMajor().equals("글로벌SW융합전공")) {
+        else if(major.equals("글로벌SW융합전공")) {
             GlobalSW gsw = new GlobalSW();
             gsw.setUser(savedUser);
 
@@ -69,6 +70,13 @@ public class UserService implements UserDetailsService {
 
             globalswRepository.save(gsw);
         }
+        /*
+        else if(major.equals("인공지능컴퓨팅전공")){
+            AIComp aicomp = new AIComp();
+            aicomp.setUser(savedUser);
+
+            aicomp.set~~;
+         */
         return savedUser;
     }
 

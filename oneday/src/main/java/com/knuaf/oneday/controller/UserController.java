@@ -103,7 +103,8 @@ public class UserController {
     }
 */
 @GetMapping("/mypage")
-public String showMyPage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+@ResponseBody
+public ResponseEntity<User> showMyPage(@AuthenticationPrincipal UserDetails userDetails) {
     User user;
     // 1. 로그인을 한 경우 (userDetails가 존재함)
     if (userDetails != null) {
@@ -135,22 +136,26 @@ public String showMyPage(Model model, @AuthenticationPrincipal UserDetails userD
         }
     }
     // HTML로 user 객체 전달
-    model.addAttribute("user", user);
+    user.setPassword("");
 
-    return "mypage";
+    return ResponseEntity.ok(user);
 }
 
     // ✅ 2. 마이페이지 정보 수정 처리 (POST)
     @PostMapping("/mypage/update")
-    public String updateMyPage(
+    @ResponseBody
+    public ResponseEntity<String> updateMyPage(
             @AuthenticationPrincipal UserDetails userDetails,
             @ModelAttribute MypageRequest updateDto) { // @RequestBody -> @ModelAttribute 변경
 
+        if(userDetails != null) {
+            return ResponseEntity.status(401).body("로그인이 필요합니다.");
+        }
         // 서비스 호출하여 정보 수정
         userService.updateUserInfo(userDetails.getUsername(), updateDto);
 
         // 수정 후 다시 마이페이지로 돌아가서 변경된 값 확인
-        return "redirect:/api/auth/mypage";
+        return ResponseEntity.ok("정보가 성공적으로 수정되었습니다.");
     }
 
     @GetMapping("/welcome")
